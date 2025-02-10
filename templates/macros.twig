@@ -1,0 +1,111 @@
+{% macro header(title, actions) %}
+    <div class="flex flex-row items-baseline justify-between border-b pb-1">
+        <h1 class="text-xl">{{ title }}</h1>
+        <div class="flex flex-row gap-5">
+            {% for action in actions %}
+                <a href="{{ action.link }}" class="hover:text-red-500">{{ action.label }}</a>
+            {% endfor %}
+        </div>
+    </div>
+{% endmacro %}
+
+{% macro table(data, headers, fields) %}
+    <table id="table" class="w-full">
+        <thead>
+        <tr>
+            {% for header in headers %}
+                <th>{{ header }}</th>
+            {% endfor %}
+        </tr>
+        </thead>
+        <tbody>
+        {% for d in data %}
+            <tr>
+                {% for field in fields %}
+                    {% if field.link %}
+                        <td>
+                            <a href="{{ field.link }}/{{ d.id }}"
+                               class="hover:text-red-500">{{ attribute(d, field.name) }}</a>
+                        </td>
+                    {% else %}
+                        <td>{{ attribute(d, field.name) }}</td>
+                    {% endif %}
+                {% endfor %}
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+    <script src="/static/datatables.min.js"></script>
+    <script>
+      (() => {
+        new DataTable('#table');
+      })();
+    </script>
+{% endmacro %}
+
+{% macro list(fields) %}
+    <dl>
+        {% for field in fields %}
+            <dt class="font-bold">{{ field.label }}</dt>
+            <dd class="mb-2">{{ field.data }}</dd>
+        {% endfor %}
+    </dl>
+{% endmacro %}
+
+{% macro inputText(name, label, value = null, required = false) %}
+    <div class="mb-2 flex flex-row items-baseline">
+        <label for="{{ name }}" class="w-1/4">{{ label }}</label>
+        <input type="text" name="{{ name }}" id="{{ name }}" class="w-3/4 border p-1"
+               value="{{ value }}" {{ required ? "required" : "" }}>
+    </div>
+{% endmacro %}
+
+{% macro inputTextarea(name, label, value = null, required = false) %}
+    <div class="mb-2 flex flex-row items-baseline">
+        <label for="{{ name }}" class="w-1/4">{{ label }}</label>
+        <textarea name="{{ name }}" rows="3" id="{{ name }}"
+                  class="w-3/4 border p-1" {{ required ? "required" : "" }}>{{ value }}</textarea>
+    </div>
+{% endmacro %}
+
+{% macro inputImage(name, label) %}
+    <div class="mt-2 flex flex-row items-baseline">
+        <label for="{{ name }}" class="w-1/4">{{ label }}</label>
+        <input type="file" name="{{ name }}" id="{{ name }}" class="w-3/4 border p-1">
+    </div>
+    <div class="mt-2 flex flex-row items-baseline">
+        <div class="w-1/4"></div>
+        <img id="{{ label }}-preview" class="border" style="max-width: 200px; display: none;">
+    </div>
+    <script type="text/javascript">
+      const input = document.getElementById('{{ label }}');
+      const preview = document.getElementById('{{ label }}-preview');
+
+      input.addEventListener('change', (event) => {
+        const file = event.target.files[0];
+        if (file) {
+          const reader = new FileReader();
+          reader.onload = (e) => {
+            preview.src = e.target.result;
+            preview.style.display = 'block';
+          };
+          reader.readAsDataURL(file);
+        } else {
+          preview.style.display = 'none';
+          preview.src = '';
+        }
+      });
+    </script>
+{% endmacro %}
+
+{% macro inputSubmit(value) %}
+    <div class="mt-2 flex flex-row items-baseline">
+        <div class="w-1/4"></div>
+        <input type="submit" value="{{ value }}" class="border px-4 py-1 hover:text-red-500 hover:cursor-pointer">
+    </div>
+{% endmacro %}
+
+{% macro inputConfirm(value) %}
+    <h2>Uh oh! Are you sure?</h2>
+    <input type="submit" value="{{ value }}" class="mt-2 border px-4 py-1 hover:text-red-500 hover:cursor-pointer">
+{% endmacro %}

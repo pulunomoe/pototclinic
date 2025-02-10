@@ -1,0 +1,26 @@
+{% extends "base.twig" %}
+{% import "macros.twig" as m %}
+
+{% block doctorsActive %}
+    font-bold text-red-500
+{% endblock %}
+
+{% block main %}
+    {{ m.header(doctor.name, [
+        {link: "/doctors", label: "Back"},
+        {link: "/doctors/"~doctor.id~"/edit", label: "Edit"},
+        {link: "/doctors/"~doctor.id~"/delete", label: "Delete"}
+    ]) }}
+    <div class="mt-2 flex flex-row items-start justify-between">
+        {{ m.list([
+            {label: "Name", data: doctor.name},
+            {label: "Description", data: doctor.description}
+        ]) }}
+        <dl>
+            <dt class="font-bold">Signature</dt>
+            <dd>
+                <img src="/var/signatures/{{ doctor.id }}.png" class="w-64">
+            </dd>
+        </dl>
+    </div>
+{% endblock %}

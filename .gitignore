@@ -1,0 +1,8 @@
+.idea
+node_modules
+public/static/input.css
+public/var/signatures/*.png
+vendor
+.env
+.php-cs-fixer.cache
+composer.lock
