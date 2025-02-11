@@ -4,6 +4,7 @@ namespace App\Model;
 
 use App\Model\Common\CrudModel;
 use PDO;
+use Slim\Psr7\UploadedFile;
 
 readonly class PatientModel extends CrudModel
 {
@@ -16,12 +17,19 @@ readonly class PatientModel extends CrudModel
         string $name,
         string $race,
         string $description,
+        ?UploadedFile $photo,
     ): string {
-        return $this->doCreate([
+        $id = $this->doCreate([
             'name' => $name,
             'race' => $race,
             'description' => $description,
         ]);
+
+        if (!empty($photo->getFilePath())) {
+            $this->savePhoto($id, $photo);
+        }
+
+        return $id;
     }
 
     public function update(
@@ -29,11 +37,30 @@ readonly class PatientModel extends CrudModel
         string $name,
         string $race,
         string $description,
+        ?UploadedFile $photo,
     ): void {
         $this->doUpdate($id, [
             'name' => $name,
             'race' => $race,
             'description' => $description,
         ]);
+
+        if (!empty($photo->getFilePath())) {
+            $this->savePhoto($id, $photo);
+        }
+    }
+
+    public function deletePhoto(string $id): void
+    {
+        $photo = __DIR__ . '/../../public/var/patients/' . $id . '.jpg';
+        if (file_exists($photo)) {
+            unlink($photo);
+        }
+    }
+
+    private function savePhoto(string $id, UploadedFile $signature): void
+    {
+        $image = imagecreatefromstring($signature->getStream()->getContents());
+        imagejpeg($image, __DIR__ . '/../../public/var/patients/' . $id . '.jpg', 90);
     }
 }

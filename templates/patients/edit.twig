@@ -1,0 +1,20 @@
+{% extends "base.twig" %}
+{% import "macros.twig" as m %}
+
+{% block patientsActive %}
+    font-bold text-red-500
+{% endblock %}
+
+{% block main %}
+    {{ m.header("Edit "~patient.name, [
+        {link: "/patients/"~patient.id, label: "Back"}
+    ]) }}
+    <form method="post" action="/patients/{{ patient.id }}/edit" enctype="multipart/form-data"
+          class="mt-4 w-full flex flex-col">
+        {{ m.inputText("name", "Name", patient.name, true) }}
+        {{ m.inputSelect("race", "Race", races, patient.race, true) }}
+        {{ m.inputImage("photo", "Photo") }}
+        {{ m.inputTextarea("description", "Description", patient.description) }}
+        {{ m.inputSubmit("Save") }}
+    </form>
+{% endblock %}

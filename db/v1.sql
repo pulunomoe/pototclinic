@@ -99,3 +99,23 @@ FROM report_details rd
          INNER JOIN reports_view rv ON rd.report_id = rv.id
          INNER JOIN tests t on rd.test_id = t.id
          INNER JOIN results r on rd.result_id = r.id
+
+CREATE TABLE certificates
+(
+    id          VARCHAR(255) NOT NULL PRIMARY KEY,
+    patient_id  VARCHAR(255) NOT NULL,
+    doctor_id   VARCHAR(255) NOT NULL,
+    created     TIMESTAMP    NOT NULL,
+    description TEXT
+);
+
+CREATE VIEW certificates_view AS
+SELECT c.*,
+       p.name        AS patient_name,
+       p.race        AS patient_race,
+       p.description AS patient_description,
+       d.name        AS doctor_name,
+       d.description AS doctor_description
+FROM certificates c
+         INNER JOIN patients p on c.patient_id = p.id
+         INNER JOIN doctors d on c.doctor_id = d.id;

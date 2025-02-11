@@ -1,0 +1,45 @@
+{% extends "patients/base.twig" %}
+{% import "macros.twig" as m %}
+
+{% block patientsActiveid %}
+    font-bold text-red-500
+{% endblock %}
+
+{% block section %}
+    {{ m.header("Certificate List", [
+        {link: "/patients/"~patient.id~"/certificates/create", label: "Create New Certificate"}
+    ]) }}
+    <table id="table" class="w-full">
+        <thead>
+        <tr>
+            <th class="dt-left">Date</th>
+            <th>Doctor</th>
+            <th width="1%"></th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for certificate in certificates %}
+            <tr>
+                <td class="dt-body-left">{{ certificate.created }}</td>
+                <td>{{ certificate.doctor_name }}</td>
+                <td class="flex flex-row gap-4">
+                    <a href="/var/certificates/{{ certificate.id }}.png" target="_blank"
+                       class="hover:text-red-500">View</a>
+                    <a href="/patients/{{ patient.id }}/certificates/{{ certificate.id }}/delete"
+                       class="hover:text-red-500">Delete</a>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+    <script src="/static/datatables.min.js"></script>
+    <script>
+      (() => {
+        new DataTable('#table', {
+          searching: false,
+          info: false,
+          paging: false,
+        });
+      })();
+    </script>
+{% endblock %}

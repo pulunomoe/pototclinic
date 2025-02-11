@@ -1,0 +1,13 @@
+{% extends "patients/base.twig" %}
+{% import "macros.twig" as m %}
+
+{% block section %}
+    {{ m.header("Create New Certificate", [
+        {link: "/patients/"~patient.id, label: "Back"}
+    ]) }}
+    <form method="post" action="/patients/{{ patient.id }}/certificates/create" class="mt-4 w-full flex flex-col">
+        {{ m.inputSelect("doctor_id", "Doctor", doctors, true) }}
+        {{ m.inputRichText("description", "Certificate content", content) }}
+        {{ m.inputSubmitAlt("Create") }}
+    </form>
+{% endblock %}

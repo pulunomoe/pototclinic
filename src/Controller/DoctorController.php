@@ -95,11 +95,7 @@ readonly class DoctorController
         DoctorModel $model,
     ): ResponseInterface {
         $model->delete($id);
-
-        $signature = __DIR__ . '/../../public/var/signatures/' . $id . '.png';
-        if (file_exists($signature)) {
-            unlink($signature);
-        }
+        $model->deleteSignature($id);
 
         return $response->withRedirect('/doctors');
     }

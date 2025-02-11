@@ -68,6 +68,40 @@
     </div>
 {% endmacro %}
 
+{% macro inputRichText(name, label, value = null, required = false) %}
+    <input type="hidden" name="{{ name }}" id="{{ name }}" value="{{ value|default('')|e }}"
+            {{ required ? "required" : "" }}>
+    <div class="my-2">
+        <label for="{{ name }}" class="block mb-1">{{ label }}</label>
+        <div id="{{ name }}-editor" class="border p-1" style="min-height: 200px;">
+            {{ value|default('')|raw }}
+        </div>
+    </div>
+    <link href="/static/quill.snow.css" rel="stylesheet">
+    <script src="/static/quill.js"></script>
+    <script type="text/javascript">
+      (() => {
+        const quill = new Quill('#{{ name }}-editor', {
+          theme: 'snow'
+        });
+        quill.on('text-change', function () {
+          document.getElementById('{{ name }}').value = quill.root.innerHTML;
+        });
+      })();
+    </script>
+{% endmacro %}
+
+{% macro inputSelect(name, label, options, selected = null, required = false) %}
+    <div class="mb-2 flex flex-row items-baseline">
+        <label for="{{ name }}" class="w-1/4">{{ label }}</label>
+        <select name="{{ name }}" id="{{ name }}" class="w-3/4 border p-1" {{ required ? "required" : "" }}>
+            {% for key, value in options %}
+                <option value="{{ key }}" {% if key == selected %}selected{% endif %}>{{ value }}</option>
+            {% endfor %}
+        </select>
+    </div>
+{% endmacro %}
+
 {% macro inputImage(name, label) %}
     <div class="mt-2 flex flex-row items-baseline">
         <label for="{{ name }}" class="w-1/4">{{ label }}</label>
@@ -109,6 +143,12 @@
 {% macro inputSubmit(value) %}
     <div class="mt-2 flex flex-row items-baseline">
         <div class="w-1/4"></div>
+        <input type="submit" value="{{ value }}" class="border px-4 py-1 hover:text-red-500 hover:cursor-pointer">
+    </div>
+{% endmacro %}
+
+{% macro inputSubmitAlt(value) %}
+    <div class="mt-2 flex flex-row items-baseline">
         <input type="submit" value="{{ value }}" class="border px-4 py-1 hover:text-red-500 hover:cursor-pointer">
     </div>
 {% endmacro %}

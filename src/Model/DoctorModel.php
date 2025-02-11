@@ -13,6 +13,12 @@ readonly class DoctorModel extends CrudModel
         parent::__construct($pdo, 'doctors');
     }
 
+    public function readAllForSelect(): array
+    {
+        $doctors = $this->fetchAll('SELECT id, name FROM doctors ORDER BY name ASC');
+        return array_column($doctors, 'name', 'id');
+    }
+
     public function create(
         string $name,
         string $description,
@@ -43,6 +49,14 @@ readonly class DoctorModel extends CrudModel
 
         if (!empty($signature->getFilePath())) {
             $this->saveSignature($id, $signature);
+        }
+    }
+
+    public function deleteSignature(string $id): void
+    {
+        $signature = __DIR__ . '/../../public/var/signatures/' . $id . '.png';
+        if (file_exists($signature)) {
+            unlink($signature);
         }
     }
 

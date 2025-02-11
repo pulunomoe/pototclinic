@@ -1,0 +1,28 @@
+{% extends "base.twig" %}
+{% import "macros.twig" as m %}
+
+{% block patientsActive %}
+    font-bold text-red-500
+{% endblock %}
+
+{% block main %}
+    {{ m.header("Patient Info", [
+        {link: "/patients", label: "Back"},
+        {link: "/patients/"~patient.id~"/edit", label: "Edit"},
+        {link: "/patients/"~patient.id~"/delete", label: "Delete"}
+    ]) }}
+    <div class="mt-2 flex flex-row items-start justify-between">
+        {{ m.list([
+            {label: "Name", data: patient.name},
+            {label: "Race", data: patient.race|capitalize},
+            {label: "Description", data: patient.description}
+        ]) }}
+        <dl>
+            <dt class="font-bold">Photo</dt>
+            <dd>
+                <img src="/var/patients/{{ patient.id }}.jpg" class="w-64">
+            </dd>
+        </dl>
+    </div>
+    {% block section %}{% endblock %}
+{% endblock %}

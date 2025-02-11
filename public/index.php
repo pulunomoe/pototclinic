@@ -2,6 +2,7 @@
 
 session_start();
 
+use App\Controller\CertificateController;
 use App\Controller\LoginController;
 use App\Controller\ResultController;
 use DI\Bridge\Slim\Bridge;
@@ -42,7 +43,7 @@ $app->addErrorMiddleware($_ENV['DEBUG'], $_ENV['DEBUG'], $_ENV['DEBUG']);
 $app->get('/', [LoginController::class, 'login']);
 $app->post('/login', [LoginController::class, 'loginPost']);
 
-$routes = ['doctor', 'nurse', 'test'];
+$routes = ['doctor', 'nurse', 'test', 'patient'];
 array_walk($routes, function ($route) use ($app) {
     $path = '/' . $route . 's';
     $controller = 'App\\Controller\\' . ucfirst($route) . 'Controller';
@@ -62,5 +63,13 @@ $app->get('/tests/{testId}/results/{resultId}/edit', [ResultController::class, '
 $app->post('/tests/{testId}/results/{resultId}/edit', [ResultController::class, 'editPost']);
 $app->get('/tests/{testId}/results/{resultId}/delete', [ResultController::class, 'delete']);
 $app->post('/tests/{testId}/results/{resultId}/delete', [ResultController::class, 'deletePost']);
+
+$app->get('/patients/{patientId}/certificates/create', [CertificateController::class, 'create']);
+$app->post('/patients/{patientId}/certificates/create', [CertificateController::class, 'createPost']);
+$app->get('/patients/{patientId}/certificates/{certificateId}/delete', [CertificateController::class, 'delete']);
+$app->post(
+    '/patients/{patientId}/certificates/{certificateId}/delete',
+    [CertificateController::class, 'deletePost'],
+);
 
 $app->run();

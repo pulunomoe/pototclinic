@@ -1,0 +1,15 @@
+{% extends "base.twig" %}
+{% import "macros.twig" as m %}
+
+{% block patientsActive %}
+    font-bold text-red-500
+{% endblock %}
+
+{% block main %}
+    {{ m.header("Delete "~patient.name, [
+        {link: "/patients/"~patient.id, label: "Back"}
+    ]) }}
+    <form method="post" action="/patients/{{ patient.id }}/delete" class="mt-2">
+        {{ m.inputConfirm("Yep") }}
+    </form>
+{% endblock %}

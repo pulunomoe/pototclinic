@@ -1,0 +1,19 @@
+{% extends "base.twig" %}
+{% import "macros.twig" as m %}
+
+{% block patientsActive %}
+    font-bold text-red-500
+{% endblock %}
+
+{% block main %}
+    {{ m.header("Create New Patient", [
+        {link: "/patients", label: "Back"}
+    ]) }}
+    <form method="post" action="/patients/create" enctype="multipart/form-data" class="mt-4 w-full flex flex-col">
+        {{ m.inputText("name", "Name", null, true) }}
+        {{ m.inputSelect("race", "Race", races, true) }}
+        {{ m.inputImage("photo", "Photo") }}
+        {{ m.inputTextarea("description", "Description") }}
+        {{ m.inputSubmit("Create") }}
+    </form>
+{% endblock %}

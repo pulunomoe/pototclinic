@@ -1,6 +1,8 @@
 .idea
 node_modules
 public/static/input.css
+public/var/certificates/*.png
+public/var/patients/*.jpg
 public/var/signatures/*.png
 vendor
 .env

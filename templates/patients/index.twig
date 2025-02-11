@@ -1,0 +1,20 @@
+{% extends "base.twig" %}
+{% import "macros.twig" as m %}
+
+{% block patientsActive %}
+    font-bold text-red-500
+{% endblock %}
+
+{% block main %}
+    {{ m.header("Patient List", [
+        {link: "/patients/create", label: "Create New Patient"}
+    ]) }}
+    {{ m.table(
+        patients,
+        ["Name", "Description"],
+        [
+            {name: "name", link: "/patients"},
+            {name: "description"}
+        ]
+    ) }}
+{% endblock %}
