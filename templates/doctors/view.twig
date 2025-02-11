@@ -6,7 +6,7 @@
 {% endblock %}
 
 {% block main %}
-    {{ m.header(doctor.name, [
+    {{ m.header("Doctor Info", [
         {link: "/doctors", label: "Back"},
         {link: "/doctors/"~doctor.id~"/edit", label: "Edit"},
         {link: "/doctors/"~doctor.id~"/delete", label: "Delete"}

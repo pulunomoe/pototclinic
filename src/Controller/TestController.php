@@ -2,21 +2,22 @@
 
 namespace App\Controller;
 
-use App\Model\DoctorModel;
+use App\Model\ResultModel;
+use App\Model\TestModel;
 use Psr\Http\Message\ResponseInterface;
 use Slim\Http\Response;
 use Slim\Http\ServerRequest;
 use Slim\Views\Twig;
 
-readonly class DoctorController
+readonly class TestController
 {
     public function index(
         Response $response,
-        DoctorModel $model,
+        TestModel $model,
         Twig $twig,
     ): ResponseInterface {
-        return $twig->render($response, 'doctors/index.twig', [
-            'doctors' => $model->readAll(),
+        return $twig->render($response, 'tests/index.twig', [
+            'tests' => $model->readAll(),
         ]);
     }
 
@@ -24,42 +25,43 @@ readonly class DoctorController
         Response $response,
         Twig $twig,
     ): ResponseInterface {
-        return $twig->render($response, 'doctors/create.twig');
+        return $twig->render($response, 'tests/create.twig');
     }
 
     public function createPost(
         ServerRequest $request,
         Response $response,
-        DoctorModel $model,
+        TestModel $model,
     ): ResponseInterface {
         $name = $request->getParam('name');
         $description = $request->getParam('description');
-        $signature = $request->getUploadedFiles()['signature'];
 
-        $id = $model->create($name, $description, $signature);
+        $id = $model->create($name, $description);
 
-        return $response->withRedirect('/doctors/' . $id);
+        return $response->withRedirect('/tests/' . $id);
     }
 
     public function view(
         string $id,
         Response $response,
-        DoctorModel $model,
+        TestModel $testModel,
+        ResultModel $resultModel,
         Twig $twig,
     ): ResponseInterface {
-        return $twig->render($response, 'doctors/view.twig', [
-            'doctor' => $model->readOne($id),
+        return $twig->render($response, 'tests/view.twig', [
+            'test' => $testModel->readOne($id),
+            'results' => $resultModel->readAllByTest($id),
         ]);
     }
 
     public function edit(
         string $id,
         Response $response,
-        DoctorModel $model,
+        TestModel $model,
         Twig $twig,
     ): ResponseInterface {
-        return $twig->render($response, 'doctors/edit.twig', [
-            'doctor' => $model->readOne($id),
+        return $twig->render($response, 'tests/edit.twig', [
+            'test' => $model->readOne($id),
         ]);
     }
 
@@ -67,40 +69,34 @@ readonly class DoctorController
         string $id,
         ServerRequest $request,
         Response $response,
-        DoctorModel $model,
+        TestModel $model,
     ): ResponseInterface {
         $name = $request->getParam('name');
         $description = $request->getParam('description');
-        $signature = $request->getUploadedFiles()['signature'];
 
-        $model->update($id, $name, $description, $signature);
+        $model->update($id, $name, $description);
 
-        return $response->withRedirect('/doctors/' . $id);
+        return $response->withRedirect('/tests/' . $id);
     }
 
     public function delete(
         string $id,
         Response $response,
-        DoctorModel $model,
+        TestModel $model,
         Twig $twig,
     ): ResponseInterface {
-        return $twig->render($response, 'doctors/delete.twig', [
-            'doctor' => $model->readOne($id),
+        return $twig->render($response, 'tests/delete.twig', [
+            'test' => $model->readOne($id),
         ]);
     }
 
     public function deletePost(
         string $id,
         Response $response,
-        DoctorModel $model,
+        TestModel $model,
     ): ResponseInterface {
         $model->delete($id);
 
-        $signature = __DIR__ . '/../../public/var/signatures/' . $id . '.png';
-        if (file_exists($signature)) {
-            unlink($signature);
-        }
-
-        return $response->withRedirect('/doctors');
+        return $response->withRedirect('/tests');
     }
 }

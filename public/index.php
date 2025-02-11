@@ -2,8 +2,8 @@
 
 session_start();
 
-use App\Controller\DoctorController;
 use App\Controller\LoginController;
+use App\Controller\ResultController;
 use DI\Bridge\Slim\Bridge;
 use DI\ContainerBuilder;
 use Slim\Views\Twig;
@@ -23,6 +23,7 @@ $containerBuilder->addDefinitions(
             $dsn .= ';port=' . $_ENV['DB_PORT'];
             $dsn .= ';dbname=' . $_ENV['DB_NAME'];
             $pdo = new PDO($dsn, $_ENV['DB_USERNAME'], $_ENV['DB_PASSWORD']);
+            $pdo->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
             $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
             return $pdo;
         },
@@ -41,13 +42,25 @@ $app->addErrorMiddleware($_ENV['DEBUG'], $_ENV['DEBUG'], $_ENV['DEBUG']);
 $app->get('/', [LoginController::class, 'login']);
 $app->post('/login', [LoginController::class, 'loginPost']);
 
-$app->get('/doctors', [DoctorController::class, 'index']);
-$app->get('/doctors/create', [DoctorController::class, 'create']);
-$app->post('/doctors/create', [DoctorController::class, 'createPost']);
-$app->get('/doctors/{id}', [DoctorController::class, 'view']);
-$app->get('/doctors/{id}/edit', [DoctorController::class, 'edit']);
-$app->post('/doctors/{id}/edit', [DoctorController::class, 'editPost']);
-$app->get('/doctors/{id}/delete', [DoctorController::class, 'delete']);
-$app->post('/doctors/{id}/delete', [DoctorController::class, 'deletePost']);
+$routes = ['doctor', 'nurse', 'test'];
+array_walk($routes, function ($route) use ($app) {
+    $path = '/' . $route . 's';
+    $controller = 'App\\Controller\\' . ucfirst($route) . 'Controller';
+    $app->get($path, [$controller, 'index']);
+    $app->get($path . '/create', [$controller, 'create']);
+    $app->post($path . '/create', [$controller, 'createPost']);
+    $app->get($path . '/{id}', [$controller, 'view']);
+    $app->get($path . '/{id}/edit', [$controller, 'edit']);
+    $app->post($path . '/{id}/edit', [$controller, 'editPost']);
+    $app->get($path . '/{id}/delete', [$controller, 'delete']);
+    $app->post($path . '/{id}/delete', [$controller, 'deletePost']);
+});
+
+$app->get('/tests/{testId}/results/create', [ResultController::class, 'create']);
+$app->post('/tests/{testId}/results/create', [ResultController::class, 'createPost']);
+$app->get('/tests/{testId}/results/{resultId}/edit', [ResultController::class, 'edit']);
+$app->post('/tests/{testId}/results/{resultId}/edit', [ResultController::class, 'editPost']);
+$app->get('/tests/{testId}/results/{resultId}/delete', [ResultController::class, 'delete']);
+$app->post('/tests/{testId}/results/{resultId}/delete', [ResultController::class, 'deletePost']);
 
 $app->run();

@@ -1,0 +1,14 @@
+{% extends "tests/base.twig" %}
+{% import "macros.twig" as m %}
+
+{% block section %}
+    {{ m.header("Create New Result", [
+        {link: "/tests/"~test.id, label: "Back"}
+    ]) }}
+    <form method="post" action="/tests/{{ test.id }}/results/create" class="mt-4 w-full flex flex-col">
+        {{ m.inputText("value", "Value", null, true) }}
+        {{ m.inputColor("color", "Color", null, true) }}
+        {{ m.inputTextarea("description", "Description") }}
+        {{ m.inputSubmit("Create") }}
+    </form>
+{% endblock %}

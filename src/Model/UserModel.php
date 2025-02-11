@@ -2,6 +2,9 @@
 
 namespace App\Model;
 
+use App\Model\Common\Model;
+use App\Model\Common\Parameter;
+
 readonly class UserModel extends Model
 {
     public function login(

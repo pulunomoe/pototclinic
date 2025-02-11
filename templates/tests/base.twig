@@ -1,0 +1,21 @@
+{% extends "base.twig" %}
+{% import "macros.twig" as m %}
+
+{% block testsActive %}
+    font-bold text-red-500
+{% endblock %}
+
+{% block main %}
+    {{ m.header("Test Info", [
+        {link: "/tests", label: "Back"},
+        {link: "/tests/"~test.id~"/edit", label: "Edit"},
+        {link: "/tests/"~test.id~"/delete", label: "Delete"}
+    ]) }}
+    <div class="my-2 flex flex-row items-start justify-between">
+        {{ m.list([
+            {label: "Name", data: test.name},
+            {label: "Description", data: test.description}
+        ]) }}
+    </div>
+    {% block section %}{% endblock %}
+{% endblock %}

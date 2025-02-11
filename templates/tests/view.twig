@@ -1,0 +1,45 @@
+{% extends "tests/base.twig" %}
+{% import "macros.twig" as m %}
+
+{% block testsActive %}
+    font-bold text-red-500
+{% endblock %}
+
+{% block section %}
+    {{ m.header("Result List", [
+        {link: "/tests/"~test.id~"/results/create", label: "Create New Result"}
+    ]) }}
+    <table id="table" class="w-full">
+        <thead>
+        <tr>
+            <th>Value</th>
+            <th>Description</th>
+            <th width="1%"></th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for result in results %}
+            <tr>
+                <td style="color: {{ result.color }}">
+                    {{ result.value }}
+                </td>
+                <td>{{ result.description }}</td>
+                <td class="flex flex-row gap-4">
+                    <a href="/tests/{{ test.id }}/results/{{ result.id }}/edit" class="hover:text-red-500">Edit</a>
+                    <a href="/tests/{{ test.id }}/results/{{ result.id }}/delete" class="hover:text-red-500">Delete</a>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+    <script src="/static/datatables.min.js"></script>
+    <script>
+      (() => {
+        new DataTable('#table', {
+          searching: false,
+          info: false,
+          paging: false,
+        });
+      })();
+    </script>
+{% endblock %}

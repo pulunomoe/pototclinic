@@ -1,0 +1,20 @@
+{% extends "base.twig" %}
+{% import "macros.twig" as m %}
+
+{% block testsActive %}
+    font-bold text-red-500
+{% endblock %}
+
+{% block main %}
+    {{ m.header("Test List", [
+        {link: "/tests/create", label: "Create New Test"}
+    ]) }}
+    {{ m.table(
+        tests,
+        ["Name", "Description"],
+        [
+            {name: "name", link: "/tests"},
+            {name: "description"}
+        ]
+    ) }}
+{% endblock %}

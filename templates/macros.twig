@@ -98,6 +98,14 @@
     </script>
 {% endmacro %}
 
+{% macro inputColor(name, label, value = null, required = false) %}
+    <div class="mb-2 flex flex-row items-baseline">
+        <label for="{{ name }}" class="w-1/4">{{ label }}</label>
+        <input type="color" name="{{ name }}" id="{{ name }}" class="w-3/4 border p-1"
+               value="{{ value }}" {{ required ? "required" : "" }}>
+    </div>
+{% endmacro %}
+
 {% macro inputSubmit(value) %}
     <div class="mt-2 flex flex-row items-baseline">
         <div class="w-1/4"></div>

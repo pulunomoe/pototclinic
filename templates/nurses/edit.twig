@@ -1,0 +1,17 @@
+{% extends "base.twig" %}
+{% import "macros.twig" as m %}
+
+{% block nursesActive %}
+    font-bold text-red-500
+{% endblock %}
+
+{% block main %}
+    {{ m.header("Edit "~nurse.name, [
+        {link: "/nurses/"~nurse.id, label: "Back"}
+    ]) }}
+    <form method="post" action="/nurses/{{ nurse.id }}/edit" class="mt-4 w-full flex flex-col">
+        {{ m.inputText("name", "Name", nurse.name, true) }}
+        {{ m.inputTextarea("description", "Description", nurse.description) }}
+        {{ m.inputSubmit("Save") }}
+    </form>
+{% endblock %}

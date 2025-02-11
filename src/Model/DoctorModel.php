@@ -2,6 +2,7 @@
 
 namespace App\Model;
 
+use App\Model\Common\CrudModel;
 use PDO;
 use Slim\Psr7\UploadedFile;
 

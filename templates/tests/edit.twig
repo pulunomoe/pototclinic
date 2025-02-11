@@ -1,0 +1,17 @@
+{% extends "base.twig" %}
+{% import "macros.twig" as m %}
+
+{% block testsActive %}
+    font-bold text-red-500
+{% endblock %}
+
+{% block main %}
+    {{ m.header("Edit "~test.name, [
+        {link: "/tests/"~test.id, label: "Back"}
+    ]) }}
+    <form method="post" action="/tests/{{ test.id }}/edit" class="mt-4 w-full flex flex-col">
+        {{ m.inputText("name", "Name", test.name, true) }}
+        {{ m.inputTextarea("description", "Description", test.description) }}
+        {{ m.inputSubmit("Save") }}
+    </form>
+{% endblock %}
