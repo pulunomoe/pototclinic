@@ -4,7 +4,7 @@ namespace App\Model\Common;
 
 use PDO;
 
-readonly class Parameter
+class Parameter
 {
     public function __construct(
         private string $name,

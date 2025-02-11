@@ -5,7 +5,7 @@ namespace App\Model;
 use App\Model\Common\CrudModel;
 use PDO;
 
-readonly class NurseModel extends CrudModel
+class NurseModel extends CrudModel
 {
     public function __construct(PDO $pdo)
     {

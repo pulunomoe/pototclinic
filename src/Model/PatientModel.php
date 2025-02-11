@@ -6,7 +6,7 @@ use App\Model\Common\CrudModel;
 use PDO;
 use Slim\Psr7\UploadedFile;
 
-readonly class PatientModel extends CrudModel
+class PatientModel extends CrudModel
 {
     public function __construct(PDO $pdo)
     {

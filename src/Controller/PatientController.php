@@ -9,7 +9,7 @@ use Slim\Http\Response;
 use Slim\Http\ServerRequest;
 use Slim\Views\Twig;
 
-readonly class PatientController
+class PatientController
 {
     private const RACES = [
         'hyur' => 'Hyur',

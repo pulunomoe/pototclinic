@@ -10,7 +10,7 @@ use Slim\Http\Response;
 use Slim\Http\ServerRequest;
 use Slim\Views\Twig;
 
-readonly class CertificateController
+class CertificateController
 {
     private const DEFAULT_CONTENT = "This is to certify that the patient was struck down by a mysterious yet very serious medical condition. One so severe that work, chores, and all forms of responsibility were strictly forbidden.<br><br>Patient is advised to extend recovery time if symptoms persist (or if they just need another day off). Avoid all stressful activities, including but not limited to: replying to emails, attending meetings, and making small talk with coworkers.";
 

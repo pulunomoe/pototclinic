@@ -6,7 +6,7 @@ use App\Model\Common\CrudModel;
 use App\Model\Common\Parameter;
 use PDO;
 
-readonly class ResultModel extends CrudModel
+class ResultModel extends CrudModel
 {
     public function __construct(PDO $pdo)
     {

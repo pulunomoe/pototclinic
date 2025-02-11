@@ -9,7 +9,7 @@ use Slim\Http\Response;
 use Slim\Http\ServerRequest;
 use Slim\Views\Twig;
 
-readonly class TestController
+class TestController
 {
     public function index(
         Response $response,

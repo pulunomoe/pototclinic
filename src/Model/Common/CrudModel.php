@@ -5,7 +5,7 @@ namespace App\Model\Common;
 use PDO;
 use Ulid\Ulid;
 
-abstract readonly class CrudModel extends Model
+abstract class CrudModel extends Model
 {
     protected string $table;
 

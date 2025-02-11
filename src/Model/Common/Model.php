@@ -5,7 +5,7 @@ namespace App\Model\Common;
 use PDO;
 use PDOStatement;
 
-abstract readonly class Model
+abstract class Model
 {
     public function __construct(
         protected PDO $pdo,

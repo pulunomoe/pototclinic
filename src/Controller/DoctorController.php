@@ -8,7 +8,7 @@ use Slim\Http\Response;
 use Slim\Http\ServerRequest;
 use Slim\Views\Twig;
 
-readonly class DoctorController
+class DoctorController
 {
     public function index(
         Response $response,

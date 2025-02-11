@@ -8,7 +8,7 @@ use Slim\Http\Response;
 use Slim\Http\ServerRequest;
 use Slim\Views\Twig;
 
-readonly class LoginController
+class LoginController
 {
     public function login(
         Response $response,

@@ -9,7 +9,7 @@ use Slim\Http\Response;
 use Slim\Http\ServerRequest;
 use Slim\Views\Twig;
 
-readonly class ResultController
+class ResultController
 {
     public function create(
         string $testId,
