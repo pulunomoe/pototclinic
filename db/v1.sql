@@ -62,7 +62,10 @@ CREATE TABLE reports
     created     TIMESTAMP    NOT NULL,
     summary     VARCHAR(255) NOT NULL,
     color       CHAR(8)      NOT NULL,
-    description TEXT
+    description TEXT,
+    FOREIGN KEY (patient_id) REFERENCES patients (id) ON DELETE CASCADE ON UPDATE CASCADE,
+    FOREIGN KEY (doctor_id) REFERENCES doctors (id) ON DELETE CASCADE ON UPDATE CASCADE,
+    FOREIGN KEY (nurse_id) REFERENCES nurses (id) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 CREATE VIEW reports_view AS
@@ -82,7 +85,10 @@ CREATE TABLE report_details
     id        VARCHAR(255) NOT NULL PRIMARY KEY,
     report_id VARCHAR(255) NOT NULL,
     test_id   VARCHAR(255) NOT NULL,
-    result_id VARCHAR(255) NOT NULL
+    result_id VARCHAR(255) NOT NULL,
+    FOREIGN KEY (report_id) REFERENCES reports (id) ON DELETE CASCADE ON UPDATE CASCADE,
+    FOREIGN KEY (test_id) REFERENCES tests (id) ON DELETE CASCADE ON UPDATE CASCADE,
+    FOREIGN KEY (result_id) REFERENCES results (id) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 CREATE VIEW report_details_view AS
@@ -106,7 +112,9 @@ CREATE TABLE certificates
     patient_id  VARCHAR(255) NOT NULL,
     doctor_id   VARCHAR(255) NOT NULL,
     created     TIMESTAMP    NOT NULL,
-    description TEXT
+    description TEXT,
+    FOREIGN KEY (patient_id) REFERENCES patients (id) ON DELETE CASCADE ON UPDATE CASCADE,
+    FOREIGN KEY (doctor_id) REFERENCES doctors (id) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 CREATE VIEW certificates_view AS

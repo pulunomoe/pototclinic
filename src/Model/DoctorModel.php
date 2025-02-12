@@ -15,8 +15,12 @@ class DoctorModel extends CrudModel
 
     public function readAllForSelect(): array
     {
-        $doctors = $this->fetchAll('SELECT id, name FROM doctors ORDER BY name ASC');
-        return array_column($doctors, 'name', 'id');
+        $doctors = $this->fetchAll('SELECT id, name FROM doctors ORDER BY name');
+        $options = [];
+        foreach ($doctors as $doctor) {
+            $options[$doctor['id']] = $doctor['name'];
+        }
+        return $options;
     }
 
     public function create(

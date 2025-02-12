@@ -34,7 +34,7 @@ class CertificateModel extends Model
         string $doctorId,
         string $description,
     ): string {
-        $id = Ulid::generate()->__toString();
+        $id = Ulid::generate();
         $created = date('Y-m-d H:i:s');
 
         $this->execute(
@@ -119,8 +119,8 @@ class CertificateModel extends Model
 
         // Date
         $date = date('d/m/Y', strtotime($created));
-        $this->writeTextCentered(24, $this->black, 'Certificate Date', $y + 175);
-        $this->writeTextCentered(32, $this->black, $date, $y + 225);
+        $this->writeTextCentered(24, $this->black, 'Certificate Date', $y + 180);
+        $this->writeTextCentered(32, $this->black, $date, $y + 230);
 
         // Doctor's signature
         $signature = imagecreatefrompng(__DIR__ . '/../../public/var/signatures/' . $doctorId . '.png');
@@ -128,7 +128,8 @@ class CertificateModel extends Model
         $this->writeTextCentered(24, $this->black, $doctorName, 1350);
 
         // QR
-        $qr = $this->generateQr($id, 250);
+        $url = $_ENV['APP_URL'] . '/var/certificates/' . $id . '.png';
+        $qr = $this->generateQr($url, 250);
         $this->drawImage($qr, 900, 1100, 250, 250);
 
         // Footer

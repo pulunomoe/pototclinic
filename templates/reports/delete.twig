@@ -6,10 +6,10 @@
 {% endblock %}
 
 {% block section %}
-    {{ m.header("Delete certificate "~certificate.created, [
+    {{ m.header("Delete report "~report.created, [
         {link: "/patients/"~patient.id, label: "Back"}
     ]) }}
-    <form method="post" action="/patients/{{ patient.id }}/certificates/{{ certificate.id }}/delete" class="mt-2">
+    <form method="post" action="/patients/{{ patient.id }}/reports/{{ report.id }}/delete" class="mt-2">
         {{ m.inputConfirm("Yep") }}
     </form>
 {% endblock %}

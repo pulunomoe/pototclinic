@@ -4,7 +4,9 @@ session_start();
 
 use App\Controller\CertificateController;
 use App\Controller\LoginController;
+use App\Controller\ReportController;
 use App\Controller\ResultController;
+use App\Model\ReportModel;
 use DI\Bridge\Slim\Bridge;
 use DI\ContainerBuilder;
 use Slim\Views\Twig;
@@ -71,5 +73,14 @@ $app->post(
     '/patients/{patientId}/certificates/{certificateId}/delete',
     [CertificateController::class, 'deletePost'],
 );
+
+$app->get('/patients/{patientId}/reports/create', [ReportController::class, 'create']);
+$app->post('/patients/{patientId}/reports/create', [ReportController::class, 'createPost']);
+$app->get('/patients/{patientId}/reports/{reportId}/delete', [ReportController::class, 'delete']);
+$app->post('/patients/{patientId}/reports/{reportId}/delete', [ReportController::class, 'deletePost']);
+
+$app->get('/x', function (ReportModel $model) {
+    $model->generate();
+});
 
 $app->run();

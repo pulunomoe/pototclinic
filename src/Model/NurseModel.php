@@ -12,6 +12,16 @@ class NurseModel extends CrudModel
         parent::__construct($pdo, 'nurses');
     }
 
+    public function readAllForSelect(): array
+    {
+        $nurses = $this->fetchAll('SELECT id, name FROM nurses ORDER BY name');
+        $options = [];
+        foreach ($nurses as $nurse) {
+            $options[$nurse['id']] = $nurse['name'];
+        }
+        return $options;
+    }
+
     public function create(
         string $name,
         string $description,

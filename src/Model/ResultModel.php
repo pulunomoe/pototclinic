@@ -15,9 +15,25 @@ class ResultModel extends CrudModel
 
     public function readAllByTest(string $testId): array
     {
-        return $this->fetchAll('SELECT * FROM results WHERE test_id = :testId', [
-            new Parameter(':testId', $testId),
+        return $this->fetchAll('SELECT * FROM results WHERE test_id = :test_id', [
+            new Parameter(':test_id', $testId),
         ]);
+    }
+
+    public function readAllForSelectByTest(string $testId): array
+    {
+        $results = $this->fetchAll('SELECT id, value, color FROM results WHERE test_id = :test_id', [
+            new Parameter(':test_id', $testId),
+        ]);
+
+        $options = [];
+        foreach ($results as $result) {
+            $options[$result['id']] = [
+                'value' => $result['value'],
+                'color' => $result['color'],
+            ];
+        }
+        return $options;
     }
 
     public function create(

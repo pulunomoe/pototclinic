@@ -2,7 +2,9 @@
 node_modules
 public/var/certificates/*.png
 public/var/patients/*.jpg
+public/var/reports/*.png
 public/var/signatures/*.png
+public/var/tmp/*.png
 vendor
 .env
 .php-cs-fixer.cache

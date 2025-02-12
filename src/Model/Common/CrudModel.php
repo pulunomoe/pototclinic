@@ -38,7 +38,7 @@ abstract class CrudModel extends Model
 
     protected function doCreate(array $data): string
     {
-        $id = Ulid::generate()->__toString();
+        $id = Ulid::generate();
 
         $data = array_merge(['id' => $id], $data);
 

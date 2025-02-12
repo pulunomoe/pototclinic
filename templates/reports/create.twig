@@ -1,0 +1,65 @@
+{% extends "patients/base.twig" %}
+{% import "macros.twig" as m %}
+
+{% block section %}
+    {{ m.header("Create New Report", [
+        {link: "/patients/"~patient.id, label: "Back"}
+    ]) }}
+    <form method="post" action="/patients/{{ patient.id }}/reports/create" class="mt-4 w-full flex flex-col">
+        {{ m.inputSelect("doctor_id", "Doctor", doctors, true) }}
+        {{ m.inputSelect("nurse_id", "Nurse", nurses, true) }}{% for test in tests %}
+            <div class="mb-2 flex flex-row items-baseline">
+                <label for="dropdown-{{ test.id }}" class="w-1/4">Test: {{ test.name }}</label>
+                <div class="relative inline-block w-3/4">
+                    <input type="hidden" name="tests[{{ test.id }}]" id="dropdown-hidden-{{ test.id }}" required>
+                    <button type="button" id="dropdown-btn-{{ test.id }}" class="w-full border p-1 text-left">
+                        Select an option
+                    </button>
+                    <ul id="dropdown-list-{{ test.id }}" class="absolute left-0 z-10 w-full bg-white border hidden">
+                        {% for id, result in test.results %}
+                            <li data-value="{{ id }}"
+                                class="flex items-center px-2 py-1 cursor-pointer hover:bg-gray-100">
+                                <span class="w-3 h-3 rounded-full mr-2"
+                                      style="background-color: {{ result.color }};"></span>
+                                {{ result.value }}
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+        {% endfor %}
+        {{ m.inputText("summary", "Summary", null, true) }}
+        {{ m.inputColor("color", "Color", null, true) }}
+        {{ m.inputSubmit("Create") }}
+    </form>
+
+    <script>
+      (() => {
+        document.querySelectorAll('[id^="dropdown-btn-"]').forEach(function (button) {
+          const testId = button.id.replace("dropdown-btn-", "");
+          const list = document.getElementById(`dropdown-list-${testId}`);
+          const hiddenInput = document.getElementById(`dropdown-hidden-${testId}`);
+
+          button.addEventListener("click", function (event) {
+            event.stopPropagation();
+            list.classList.toggle("hidden");
+          });
+
+          list.querySelectorAll("li").forEach(function (item) {
+            item.addEventListener("click", function () {
+              button.textContent = item.textContent.trim();
+              hiddenInput.value = item.getAttribute("data-value");
+              list.classList.add("hidden");
+            });
+          });
+
+          document.addEventListener("click", function (event) {
+            if (!button.contains(event.target) && !list.contains(event.target)) {
+              list.classList.add("hidden");
+            }
+          });
+        });
+      })();
+    </script>
+
+{% endblock %}

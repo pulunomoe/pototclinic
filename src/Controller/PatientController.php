@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Model\CertificateModel;
 use App\Model\PatientModel;
+use App\Model\ReportModel;
 use Psr\Http\Message\ResponseInterface;
 use Slim\Http\Response;
 use Slim\Http\ServerRequest;
@@ -60,11 +61,13 @@ class PatientController
         Response $response,
         PatientModel $patientModel,
         CertificateModel $certificateModel,
+        ReportModel $reportModel,
         Twig $twig,
     ): ResponseInterface {
         return $twig->render($response, 'patients/view.twig', [
             'patient' => $patientModel->readOne($id),
             'certificates' => $certificateModel->readAllByPatient($id),
+            'reports' => $reportModel->readAllByPatient($id),
         ]);
     }
 
