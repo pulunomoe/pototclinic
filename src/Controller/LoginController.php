@@ -35,4 +35,11 @@ class LoginController
 
         return $response->withRedirect('/patients');
     }
+
+    public function logout(
+        Response $response,
+    ): ResponseInterface {
+        session_destroy();
+        return $response->withRedirect('/login');
+    }
 }

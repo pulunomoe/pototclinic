@@ -6,7 +6,7 @@ use App\Controller\CertificateController;
 use App\Controller\LoginController;
 use App\Controller\ReportController;
 use App\Controller\ResultController;
-use App\Model\ReportModel;
+use App\Middleware\AuthenticationMiddleware;
 use DI\Bridge\Slim\Bridge;
 use DI\ContainerBuilder;
 use Slim\Views\Twig;
@@ -43,44 +43,46 @@ $app->add(TwigMiddleware::create($app, $container->get(Twig::class)));
 $app->addErrorMiddleware($_ENV['DEBUG'], $_ENV['DEBUG'], $_ENV['DEBUG']);
 
 $app->get('/', [LoginController::class, 'login']);
+$app->get('/login', [LoginController::class, 'login']);
 $app->post('/login', [LoginController::class, 'loginPost']);
+$app->get('/logout', [LoginController::class, 'logout']);
+
+$auth = new AuthenticationMiddleware();
 
 $routes = ['doctor', 'nurse', 'test', 'patient'];
-array_walk($routes, function ($route) use ($app) {
+foreach ($routes as $route) {
     $path = '/' . $route . 's';
     $controller = 'App\\Controller\\' . ucfirst($route) . 'Controller';
-    $app->get($path, [$controller, 'index']);
-    $app->get($path . '/create', [$controller, 'create']);
-    $app->post($path . '/create', [$controller, 'createPost']);
-    $app->get($path . '/{id}', [$controller, 'view']);
-    $app->get($path . '/{id}/edit', [$controller, 'edit']);
-    $app->post($path . '/{id}/edit', [$controller, 'editPost']);
-    $app->get($path . '/{id}/delete', [$controller, 'delete']);
-    $app->post($path . '/{id}/delete', [$controller, 'deletePost']);
-});
+    $app->get($path, [$controller, 'index'])->add($auth);
+    $app->get($path . '/create', [$controller, 'create'])->add($auth);
+    $app->post($path . '/create', [$controller, 'createPost'])->add($auth);
+    $app->get($path . '/{id}', [$controller, 'view'])->add($auth);
+    $app->get($path . '/{id}/edit', [$controller, 'edit'])->add($auth);
+    $app->post($path . '/{id}/edit', [$controller, 'editPost'])->add($auth);
+    $app->get($path . '/{id}/delete', [$controller, 'delete'])->add($auth);
+    $app->post($path . '/{id}/delete', [$controller, 'deletePost'])->add($auth);
+}
 
-$app->get('/tests/{testId}/results/create', [ResultController::class, 'create']);
-$app->post('/tests/{testId}/results/create', [ResultController::class, 'createPost']);
-$app->get('/tests/{testId}/results/{resultId}/edit', [ResultController::class, 'edit']);
-$app->post('/tests/{testId}/results/{resultId}/edit', [ResultController::class, 'editPost']);
-$app->get('/tests/{testId}/results/{resultId}/delete', [ResultController::class, 'delete']);
-$app->post('/tests/{testId}/results/{resultId}/delete', [ResultController::class, 'deletePost']);
+$app->get('/tests/{testId}/results/create', [ResultController::class, 'create'])->add($auth);
+$app->post('/tests/{testId}/results/create', [ResultController::class, 'createPost'])->add($auth);
+$app->get('/tests/{testId}/results/{resultId}/edit', [ResultController::class, 'edit'])->add($auth);
+$app->post('/tests/{testId}/results/{resultId}/edit', [ResultController::class, 'editPost'])->add($auth);
+$app->get('/tests/{testId}/results/{resultId}/delete', [ResultController::class, 'delete'])->add($auth);
+$app->post('/tests/{testId}/results/{resultId}/delete', [ResultController::class, 'deletePost'])->add($auth);
 
-$app->get('/patients/{patientId}/certificates/create', [CertificateController::class, 'create']);
-$app->post('/patients/{patientId}/certificates/create', [CertificateController::class, 'createPost']);
-$app->get('/patients/{patientId}/certificates/{certificateId}/delete', [CertificateController::class, 'delete']);
+$app->get('/patients/{patientId}/certificates/create', [CertificateController::class, 'create'])->add($auth);
+$app->post('/patients/{patientId}/certificates/create', [CertificateController::class, 'createPost'])->add($auth);
+$app->get('/patients/{patientId}/certificates/{certificateId}/delete', [CertificateController::class, 'delete'])->add(
+    $auth,
+)->add($auth);
 $app->post(
     '/patients/{patientId}/certificates/{certificateId}/delete',
     [CertificateController::class, 'deletePost'],
-);
+)->add($auth);
 
-$app->get('/patients/{patientId}/reports/create', [ReportController::class, 'create']);
-$app->post('/patients/{patientId}/reports/create', [ReportController::class, 'createPost']);
-$app->get('/patients/{patientId}/reports/{reportId}/delete', [ReportController::class, 'delete']);
-$app->post('/patients/{patientId}/reports/{reportId}/delete', [ReportController::class, 'deletePost']);
-
-$app->get('/x', function (ReportModel $model) {
-    $model->generate();
-});
+$app->get('/patients/{patientId}/reports/create', [ReportController::class, 'create'])->add($auth);
+$app->post('/patients/{patientId}/reports/create', [ReportController::class, 'createPost'])->add($auth);
+$app->get('/patients/{patientId}/reports/{reportId}/delete', [ReportController::class, 'delete'])->add($auth);
+$app->post('/patients/{patientId}/reports/{reportId}/delete', [ReportController::class, 'deletePost'])->add($auth);
 
 $app->run();
